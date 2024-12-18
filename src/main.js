@@ -19,8 +19,8 @@ async function run() {
     const additionalMessage = core.getInput('additional-message');
     const updateComment = core.getInput('update-comment') === 'true';
 
-    if (core.getInput('output-html')) {
-      await genhtml(coverageFiles, tmpPath, core.getInput('genhtml-args'));
+    if (core.getInput('output-html') === 'true') {
+      await genhtml(coverageFiles, tmpPath);
     }
 
     const coverageFile = await mergeCoverages(coverageFiles, tmpPath);
@@ -103,11 +103,11 @@ async function upsertComment(body, commentHeaderPrefix, octokit) {
   }
 }
 
-async function genhtml(coverageFiles, tmpPath, additionalArgs) {
+async function genhtml(coverageFiles, tmpPath) {
   const workingDirectory = core.getInput('working-directory').trim() || './';
   const artifactName = core.getInput('artifact-name').trim();
   const artifactPath = path.resolve(tmpPath, 'html').trim();
-  const args = [...coverageFiles, additionalArgs.split(' ')];
+  const args = [...coverageFiles, core.getInput('genhtml-args').trim().split(' ')];
 
   args.push('--output-directory');
   args.push(artifactPath);
