@@ -26,6 +26,14 @@ inputs:
     description: 'Set to `true` to update the previous code coverage comment if such exists. When set to `false`, a new comment is always created. Optional. Default: `false`'
     required: false
     default: "false"
+  output-html:
+    description: 'Set to `false` to not build a HTML output.'
+    required: false
+    default: "true"
+  genhtml-args:
+    description: 'Args for genhtml script'
+    required: false
+    default: "--rc lcov_branch_coverage=1"
 outputs:
   total-coverage:
       description: 'The total coverage from scanned files.'

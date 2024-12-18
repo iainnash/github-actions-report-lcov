@@ -19,7 +19,9 @@ async function run() {
     const additionalMessage = core.getInput('additional-message');
     const updateComment = core.getInput('update-comment') === 'true';
 
-    await genhtml(coverageFiles, tmpPath);
+    if (core.getInput('output-html')) {
+      await genhtml(coverageFiles, tmpPath, core.getInput('genhtml-args'));
+    }
 
     const coverageFile = await mergeCoverages(coverageFiles, tmpPath);
     const totalCoverage = lcovTotal(coverageFile);
@@ -101,11 +103,11 @@ async function upsertComment(body, commentHeaderPrefix, octokit) {
   }
 }
 
-async function genhtml(coverageFiles, tmpPath) {
+async function genhtml(coverageFiles, tmpPath, additionalArgs) {
   const workingDirectory = core.getInput('working-directory').trim() || './';
   const artifactName = core.getInput('artifact-name').trim();
   const artifactPath = path.resolve(tmpPath, 'html').trim();
-  const args = [...coverageFiles, '--rc', 'lcov_branch_coverage=1'];
+  const args = [...coverageFiles, additionalArgs.split(' ')];
 
   args.push('--output-directory');
   args.push(artifactPath);
