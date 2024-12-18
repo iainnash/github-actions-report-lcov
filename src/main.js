@@ -12,6 +12,10 @@ const events = ['pull_request', 'pull_request_target'];
 async function run() {
   try {
     const tmpPath = path.resolve(os.tmpdir(), github.context.action);
+    if (!os.existsSync(tmpPath)) {
+      os.mkdirSync(tmpPath);
+    }
+
     const coverageFilesPattern = core.getInput('coverage-files');
     const globber = await glob.create(coverageFilesPattern);
     const coverageFiles = await globber.glob();
