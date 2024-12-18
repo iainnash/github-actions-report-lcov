@@ -5,6 +5,7 @@ const github = require('@actions/github');
 const glob = require('@actions/glob');
 const lcovTotal = require("lcov-total");
 const os = require('os');
+const fs = require('fs');
 const path = require('path');
 
 const events = ['pull_request', 'pull_request_target'];
@@ -12,8 +13,8 @@ const events = ['pull_request', 'pull_request_target'];
 async function run() {
   try {
     const tmpPath = path.resolve(os.tmpdir(), github.context.action);
-    if (!os.existsSync(tmpPath)) {
-      os.mkdirSync(tmpPath);
+    if (!fs.existsSync(tmpPath)) {
+      fs.mkdirSync(tmpPath);
     }
 
     const coverageFilesPattern = core.getInput('coverage-files');
